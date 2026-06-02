@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wey AI — Ethiopian Intelligence. Global Standards.</title>
+<meta name="description" content="Wey AI is Ethiopia's AI application platform, serving the Horn of Africa and beyond. Intelligent AI products that speak your language — from call centres to data management and beyond.">
+<meta property="og:title" content="Wey AI — Ethiopian Intelligence. Global Standards.">
+<meta property="og:description" content="AI built in Ethiopia. Speaks Amharic, Afaan Oromoo, Tigrinya, Somali and English.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #07070f;
+  --bg2:     #0b0b18;
+  --bg3:     #0f0f1e;
+  --border:  rgba(200,168,75,0.1);
+  --border2: rgba(255,255,255,0.05);
+  --text:    #eeeae0;
+  --muted:   #6b6b80;
+  --muted2:  #9090a0;
+  --gold:    #c8a84b;
+  --gold2:   #e8cc7a;
+  --gold3:   #a88030;
+  --green:   #3ecf8e;
+  --red:     #f16868;
+  --blue:    #5b9cf6;
+  --sw:      68px;   /* sidebar collapsed width */
+  --se:      224px;  /* sidebar expanded width */
+}
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body {
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Outfit', sans-serif;
+  font-size:16px;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+/* grain */
+body::before {
+  content:''; position:fixed; inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:999;
+}
+
+/* ── SIDEBAR ───────────────────────────────── */
+.sidebar {
+  position:fixed; top:0; left:0; bottom:0;
+  width:var(--sw);
+  z-index:100;
+  background:var(--bg2);
+  border-right:1px solid var(--border);
+  display:flex; flex-direction:column;
+  overflow:hidden;
+  transition:width .32s cubic-bezier(.4,0,.2,1), box-shadow .32s;
+}
+.sidebar:hover {
+  width:var(--se);
+  box-shadow:6px 0 32px rgba(0,0,0,.55);
+}
+/* gold top accent line */
+.sidebar::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg, var(--gold3), transparent);
+}
+
+/* logo */
+.sb-logo {
+  display:flex; align-items:center;
+  padding:0; height:72px;
+  border-bottom:1px solid var(--border);
+  text-decoration:none; overflow:hidden; flex-shrink:0;
+}
+.sb-logo-icon {
+  min-width:var(--sw); display:flex; align-items:center; justify-content:center;
+  font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:2px;
+  color:var(--text); flex-shrink:0;
+}
+.sb-logo-icon span { color:var(--gold); }
+.sb-logo-full {
+  font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:3px;
+  color:var(--text); white-space:nowrap;
+  opacity:0; transform:translateX(-6px);
+  transition:opacity .22s .08s, transform .22s .08s;
+}
+.sb-logo-full span { color:var(--gold); }
+.sidebar:hover .sb-logo-full { opacity:1; transform:translateX(0); }
+
+/* nav */
+.sb-nav { display:flex; flex-direction:column; gap:2px; padding:14px 8px; flex:1; overflow:hidden; }
+.sb-item {
+  display:flex; align-items:center;
+  padding:10px 0; border-radius:4px;
+  color:var(--muted); text-decoration:none;
+  font-size:13.5px; font-weight:400;
+  transition:color .18s, background .18s;
+  white-space:nowrap; overflow:hidden;
+  position:relative;
+}
+.sb-item:hover { color:var(--text); background:rgba(255,255,255,0.04); }
+.sb-item.active { color:var(--gold); background:rgba(200,168,75,0.08); }
+.sb-item.active::after {
+  content:''; position:absolute; left:0; top:22%; bottom:22%;
+  width:2px; background:var(--gold); border-radius:0 2px 2px 0;
+}
+.sb-icon {
+  min-width:var(--sw); display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; opacity:.65; transition:opacity .18s;
+}
+.sb-item:hover .sb-icon, .sb-item.active .sb-icon { opacity:1; }
+.sb-label {
+  opacity:0; transform:translateX(-4px);
+  transition:opacity .2s .06s, transform .2s .06s;
+}
+.sidebar:hover .sb-label { opacity:1; transform:translateX(0); }
+
+/* bottom */
+.sb-bottom {
+  padding:12px 8px 16px;
+  border-top:1px solid var(--border);
+  display:flex; flex-direction:column; gap:10px; overflow:hidden;
+}
+
+/* language switcher */
+.lang-row {
+  display:flex; align-items:center; gap:0;
+  overflow:hidden;
+}
+.lang-icon-wrap {
+  min-width:var(--sw); display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.lang-icon-wrap svg { opacity:.5; }
+.lang-buttons {
+  display:flex; gap:5px;
+  opacity:0; transform:translateX(-6px);
+  transition:opacity .2s .06s, transform .2s .06s;
+  overflow:hidden;
+}
+.sidebar:hover .lang-buttons { opacity:1; transform:translateX(0); }
+.lb {
+  background:none; border:1px solid var(--border2);
+  border-radius:3px; padding:4px 8px; cursor:pointer;
+  font-size:11px; font-weight:600; color:var(--muted);
+  letter-spacing:.5px; transition:all .15s;
+}
+.lb:hover { border-color:var(--gold); color:var(--text); }
+.lb.active { border-color:var(--gold); background:rgba(200,168,75,0.1); color:var(--gold); }
+
+/* location */
+.sb-loc {
+  display:flex; align-items:center; overflow:hidden;
+}
+.sb-loc-icon {
+  min-width:var(--sw); display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.sb-loc-text {
+  font-size:11px; color:var(--muted); white-space:nowrap;
+  opacity:0; transition:opacity .2s .06s;
+}
+.sidebar:hover .sb-loc-text { opacity:1; }
+
+/* CTA */
+.sb-cta {
+  display:flex; align-items:center;
+  background:var(--gold); color:#07070f;
+  border-radius:3px; text-decoration:none;
+  height:38px; overflow:hidden;
+  transition:background .18s;
+}
+.sb-cta:hover { background:var(--gold2); }
+.sb-cta-icon {
+  min-width:var(--sw); display:flex; align-items:center; justify-content:center;
+  font-size:16px; flex-shrink:0;
+}
+.sb-cta-text {
+  font-size:12.5px; font-weight:600; white-space:nowrap;
+  opacity:0; transition:opacity .2s .06s;
+  letter-spacing:.3px;
+}
+.sidebar:hover .sb-cta-text { opacity:1; }
+
+/* ── MAIN ───────────────────────────────── */
+.main-wrap { margin-left:var(--sw); display:block; min-height:100vh; }
+
+/* ── HERO ───────────────────────────────── */
+.hero {
+  position:relative; min-height:100vh;
+  display:flex; align-items:center;
+  padding:80px 68px 80px;
+  overflow:hidden;
+}
+.hero-lines {
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(200,168,75,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(200,168,75,0.04) 1px,transparent 1px);
+  background-size:80px 80px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black,transparent);
+}
+.hero-orb {
+  position:absolute; top:5%; right:3%;
+  width:620px; height:620px;
+  background:radial-gradient(circle,rgba(200,168,75,0.055) 0%,transparent 68%);
+  pointer-events:none;
+}
+/* ornate corner marks — classic touch */
+.hero-corner {
+  position:absolute; top:36px; right:48px;
+  width:80px; height:80px; pointer-events:none; opacity:.18;
+}
+.hero-content { position:relative; max-width:840px; }
+
+.hero-tag {
+  display:inline-flex; align-items:center; gap:10px;
+  border:1px solid rgba(200,168,75,0.3);
+  color:var(--gold3);
+  padding:6px 18px; border-radius:2px;
+  font-size:11px; font-weight:600; letter-spacing:2.5px;
+  text-transform:uppercase; margin-bottom:38px;
+}
+.hero-tag::before,.hero-tag::after { content:'✦'; font-size:7px; color:var(--gold3); opacity:.7; }
+
+h1 {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(64px,9vw,118px);
+  line-height:.93; letter-spacing:2px;
+  margin-bottom:28px;
+}
+h1 em { font-style:normal; color:var(--gold); }
+
+/* classic rule under h1 */
+.hero-rule {
+  width:52px; height:1px;
+  background:linear-gradient(90deg,var(--gold),transparent);
+  margin-bottom:28px;
+}
+
+.hero-sub {
+  font-size:17px; color:var(--muted2);
+  max-width:540px; line-height:1.8;
+  margin-bottom:52px; font-weight:300;
+}
+.hero-btns { display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
+
+.btn-gold {
+  background:var(--gold); color:#07070f;
+  padding:15px 34px; border-radius:3px;
+  font-weight:600; font-size:14px;
+  text-decoration:none; letter-spacing:.5px;
+  transition:all .2s;
+}
+.btn-gold:hover { background:var(--gold2); transform:translateY(-2px); box-shadow:0 8px 24px rgba(200,168,75,.2); }
+.btn-outline {
+  color:var(--text); padding:15px 34px;
+  border-radius:3px; font-weight:500;
+  font-size:14px; text-decoration:none;
+  border:1px solid var(--border2);
+  transition:all .2s;
+}
+.btn-outline:hover { border-color:rgba(200,168,75,.3); background:rgba(200,168,75,.04); }
+
+/* ── TICKER ───────────────────────────────── */
+.ticker-bar {
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:15px 0; overflow:hidden;
+  background:var(--bg2);
+}
+.ticker-inner {
+  display:flex; gap:60px;
+  animation:tick 30s linear infinite; white-space:nowrap;
+}
+@keyframes tick { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+.ti { display:flex; align-items:center; gap:12px; font-size:11px; color:var(--muted); font-weight:500; letter-spacing:1.5px; text-transform:uppercase; flex-shrink:0; }
+.ti b { color:var(--gold); font-weight:600; }
+.ti-sep { width:3px; height:3px; border-radius:50%; background:rgba(200,168,75,.25); }
+
+/* ── REGION BAR ───────────────────────────── */
+.region-bar {
+  background:var(--bg2);
+  border-bottom:1px solid var(--border);
+  padding:22px 68px;
+  display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+}
+.region-label { font-size:10px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); font-weight:600; flex-shrink:0; }
+.region-divider { width:1px; height:16px; background:var(--border); }
+.region-flags { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.rflag { font-size:20px; opacity:.65; transition:opacity .2s,transform .2s; cursor:default; line-height:1; }
+.rflag:hover { opacity:1; transform:scale(1.15); }
+.region-note { font-size:11px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-left:4px; }
+
+/* ── SECTIONS ─────────────────────────────── */
+section { position:relative; padding:100px 68px; }
+.s-label { font-size:11px; font-weight:600; letter-spacing:2.5px; text-transform:uppercase; color:var(--gold); margin-bottom:14px; }
+
+h2 {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(44px,6vw,72px);
+  letter-spacing:2px; line-height:1;
+  margin-bottom:18px;
+}
+/* classic serif accent on h2 */
+h2 .serif { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:.85em; letter-spacing:0; font-weight:300; }
+
+.s-intro { font-size:17px; color:var(--muted2); max-width:520px; line-height:1.75; font-weight:300; margin-bottom:64px; }
+
+/* section top rule — classic touch */
+.s-rule { width:40px; height:1px; background:linear-gradient(90deg,var(--gold3),transparent); margin-bottom:20px; }
+
+/* ── PLATFORM GRID ────────────────────────── */
+.vision { background:var(--bg2); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+.platform-grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:1px; background:var(--border);
+  border-radius:6px; overflow:hidden;
+}
+.p-card { background:var(--bg2); padding:40px 32px; position:relative; overflow:hidden; transition:background .25s; }
+.p-card:hover { background:#101020; }
+.p-card.live::after   { content:'LIVE';   position:absolute; top:18px; right:18px; background:var(--green); color:#07070f; font-size:9px; font-weight:700; letter-spacing:1.5px; padding:3px 8px; border-radius:2px; }
+.p-card.dev::after    { content:'IN DEV'; position:absolute; top:18px; right:18px; background:var(--gold);  color:#07070f; font-size:9px; font-weight:700; letter-spacing:1.5px; padding:3px 8px; border-radius:2px; }
+.p-card.soon::after   { content:'SOON';   position:absolute; top:18px; right:18px; background:rgba(255,255,255,.07); color:var(--muted); font-size:9px; font-weight:700; letter-spacing:1.5px; padding:3px 8px; border-radius:2px; }
+/* classic gold left accent on live card */
+.p-card.live { border-left:2px solid rgba(200,168,75,.35); }
+.p-name { font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:2px; color:var(--text); margin-bottom:6px; }
+.p-name span { color:var(--gold); }
+.p-sub { font-size:12px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-bottom:20px; }
+.p-desc { font-size:14px; color:var(--muted); line-height:1.65; font-weight:300; }
+.p-divider { width:32px; height:1px; background:var(--gold); opacity:.35; margin:20px 0; }
+
+/* ── WEY CALL DEEP DIVE ───────────────────── */
+.call-split { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); border-radius:6px; overflow:hidden; }
+.call-left { background:var(--bg3); padding:56px 48px; }
+.call-right { background:var(--bg2); padding:56px 48px; }
+.call-right h3 { font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:1.5px; margin-bottom:28px; color:var(--text); }
+
+.check-list { list-style:none; display:flex; flex-direction:column; gap:16px; }
+.check-list li { display:flex; align-items:flex-start; gap:14px; font-size:14px; color:var(--muted); line-height:1.55; }
+.check-list li::before { content:'→'; color:var(--gold); font-size:14px; flex-shrink:0; margin-top:1px; }
+
+.lang-cards { display:flex; flex-direction:column; gap:8px; margin-top:32px; }
+.lang-card {
+  display:flex; align-items:center; justify-content:space-between;
+  background:rgba(200,168,75,.05); border:1px solid rgba(200,168,75,.12);
+  border-left:2px solid rgba(200,168,75,.4);
+  padding:13px 20px; border-radius:3px;
+}
+.lang-name { font-size:15px; font-weight:500; color:var(--text); }
+.lang-script { font-size:14px; color:var(--gold); letter-spacing:.5px; }
+.lang-voice { font-size:11px; color:var(--muted); letter-spacing:.5px; }
+
+/* pilot box */
+.pilot-box {
+  margin-top:36px; padding:26px 24px;
+  background:rgba(200,168,75,.05);
+  border:1px solid rgba(200,168,75,.15);
+  border-radius:3px; position:relative; overflow:hidden;
+}
+.pilot-box::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,var(--gold3),transparent);
+}
+.pilot-label { font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:10px; }
+.pilot-text { font-size:14px; color:var(--muted); line-height:1.65; font-weight:300; }
+
+/* ── STATS ────────────────────────────────── */
+.stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border-radius:6px; overflow:hidden; }
+.stat { background:var(--bg2); padding:44px 32px; text-align:center; }
+.stat-n { font-family:'Bebas Neue',sans-serif; font-size:56px; letter-spacing:1px; color:var(--gold); line-height:1; margin-bottom:8px; }
+.stat-l { font-size:13px; color:var(--muted); font-weight:400; }
+
+/* ── BEFORE / AFTER ───────────────────────── */
+.ba-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); border-radius:6px; overflow:hidden; }
+.ba-card { background:var(--bg3); padding:44px 40px; }
+.ba-card h3 { font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:28px; }
+.ba-card.bad h3 { color:var(--red); }
+.ba-card.good h3 { color:var(--green); }
+.ba-item { display:flex; gap:14px; margin-bottom:18px; font-size:14px; color:var(--muted); line-height:1.55; }
+.ba-icon { flex-shrink:0; font-size:14px; margin-top:1px; }
+
+/* ── ROADMAP ──────────────────────────────── */
+.roadmap { background:var(--bg2); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+.road-list { display:flex; flex-direction:column; gap:1px; background:var(--border); border-radius:6px; overflow:hidden; }
+.road-item { background:var(--bg2); padding:32px 40px; display:grid; grid-template-columns:140px 1fr auto; align-items:center; gap:40px; transition:background .2s; }
+.road-item:hover { background:#101020; }
+.road-phase { font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:2px; color:var(--muted); }
+.road-item.current .road-phase { color:var(--gold); }
+.road-title { font-size:16px; font-weight:500; color:var(--text); margin-bottom:4px; }
+.road-desc { font-size:13px; color:var(--muted); font-weight:300; }
+.road-badge { font-size:10px; font-weight:700; letter-spacing:1.5px; padding:4px 10px; border-radius:2px; white-space:nowrap; }
+.road-badge.live     { background:rgba(62,207,142,.12); color:var(--green); border:1px solid rgba(62,207,142,.25); }
+.road-badge.building { background:rgba(200,168,75,.12); color:var(--gold);  border:1px solid rgba(200,168,75,.25); }
+.road-badge.next     { background:rgba(255,255,255,.04); color:var(--muted); border:1px solid var(--border2); }
+
+/* ── CTA ──────────────────────────────────── */
+.cta { text-align:center; }
+.cta-box {
+  max-width:640px; margin:0 auto;
+  border:1px solid var(--border);
+  border-radius:6px; padding:72px 60px;
+  background:var(--bg2); position:relative; overflow:hidden;
+}
+.cta-box::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold3),transparent);
+}
+.cta-box::after {
+  content:''; position:absolute; top:-100px; left:50%; transform:translateX(-50%);
+  width:400px; height:400px;
+  background:radial-gradient(circle,rgba(200,168,75,.07) 0%,transparent 70%);
+  pointer-events:none;
+}
+.cta-box h2 { margin-bottom:16px; }
+.cta-box p { color:var(--muted); font-size:16px; font-weight:300; line-height:1.7; margin-bottom:44px; max-width:420px; margin-left:auto; margin-right:auto; }
+.contact-info { display:flex; flex-direction:column; gap:10px; align-items:center; }
+.contact-info a { color:var(--gold); text-decoration:none; font-size:15px; font-weight:500; font-family:'Cormorant Garamond',serif; font-size:19px; transition:color .2s; }
+.contact-info a:hover { color:var(--gold2); }
+.contact-info span { font-size:13px; color:var(--muted); }
+
+/* ── FOOTER ───────────────────────────────── */
+footer {
+  border-top:1px solid var(--border);
+  padding:36px 68px;
+  display:flex; align-items:center; justify-content:space-between;
+  position:relative;
+}
+footer::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,var(--gold3),transparent 50%);
+}
+.f-logo { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:3px; color:var(--text); text-decoration:none; }
+.f-logo span { color:var(--gold); }
+footer p { font-size:13px; color:var(--muted); }
+.f-links { display:flex; gap:24px; }
+.f-links a { font-size:13px; color:var(--muted); text-decoration:none; transition:color .2s; }
+.f-links a:hover { color:var(--text); }
+
+/* ── FADE ANIMATION ───────────────────────── */
+.fade { opacity:0; transform:translateY(22px); transition:opacity .65s ease,transform .65s ease; }
+.fade.in { opacity:1; transform:translateY(0); }
+
+/* ── LANGUAGE SWITCH TRANSITIONS ─────────── */
+.switching [data-t] { opacity:0; transition:opacity .12s; }
+
+/* ── RESPONSIVE ───────────────────────────── */
+@media(max-width:960px){
+  :root { --sw:0px; }
+  .sidebar { display:none; }
+  .main-wrap { margin-left:0; }
+  .hero { padding:80px 24px 60px; }
+  section { padding:70px 24px; }
+  h1 { font-size:clamp(52px,12vw,80px); }
+  .platform-grid { grid-template-columns:1fr; }
+  .call-split { grid-template-columns:1fr; }
+  .stats-row { grid-template-columns:repeat(2,1fr); }
+  .ba-grid { grid-template-columns:1fr; }
+  .road-item { grid-template-columns:1fr; gap:12px; }
+  .road-badge { width:fit-content; }
+  footer { flex-direction:column; gap:20px; text-align:center; padding:36px 24px; }
+  .cta-box { padding:44px 28px; }
+  .region-bar { padding:20px 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════ SIDEBAR ═══════ -->
+<div class="sidebar" id="sidebar">
+
+  <a href="#home" class="sb-logo">
+    <span class="sb-logo-icon">W<span>·</span>AI</span>
+    <span class="sb-logo-full">Wey<span>AI</span></span>
+  </a>
+
+  <nav class="sb-nav">
+    <a href="#home" class="sb-item active" data-section="home">
+      <span class="sb-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </span>
+      <span class="sb-label" data-t="nav_home">Home</span>
+    </a>
+    <a href="#platform" class="sb-item" data-section="platform">
+      <span class="sb-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      </span>
+      <span class="sb-label" data-t="nav_platform">Platform</span>
+    </a>
+    <a href="#weycall" class="sb-item" data-section="weycall">
+      <span class="sb-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.35 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </span>
+      <span class="sb-label">Wey Call</span>
+    </a>
+    <a href="#roadmap" class="sb-item" data-section="roadmap">
+      <span class="sb-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      </span>
+      <span class="sb-label" data-t="nav_roadmap">Roadmap</span>
+    </a>
+    <a href="#contact" class="sb-item" data-section="contact">
+      <span class="sb-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </span>
+      <span class="sb-label" data-t="nav_contact">Contact</span>
+    </a>
+  </nav>
+
+  <div class="sb-bottom">
+    <!-- Language switcher -->
+    <div class="lang-row">
+      <span class="lang-icon-wrap">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </span>
+      <div class="lang-buttons">
+        <button class="lb active" data-lang="en">EN</button>
+        <button class="lb" data-lang="am">አማ</button>
+        <button class="lb" data-lang="om">OM</button>
+        <button class="lb" data-lang="ti">ትግ</button>
+      </div>
+    </div>
+
+    <div class="sb-loc">
+      <span class="sb-loc-icon">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </span>
+      <span class="sb-loc-text">Addis Ababa · Horn of Africa</span>
+    </div>
+
+    <a href="#contact" class="sb-cta">
+      <span class="sb-cta-icon">✦</span>
+      <span class="sb-cta-text" data-t="cta_btn">Request Demo</span>
+    </a>
+  </div>
+</div>
+
+<!-- ═══════ MAIN ═══════ -->
+<div class="main-wrap">
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-lines"></div>
+  <div class="hero-orb"></div>
+  <!-- classic corner ornament -->
+  <svg class="hero-corner" viewBox="0 0 80 80" fill="none">
+    <path d="M4 4 L76 4 L76 76" stroke="#c8a84b" stroke-width="0.7" opacity="1"/>
+    <path d="M4 4 L4 76 L76 76" stroke="#c8a84b" stroke-width="0.7" opacity=".4"/>
+    <circle cx="4" cy="4" r="3" fill="#c8a84b"/>
+    <circle cx="76" cy="76" r="3" fill="#c8a84b" opacity=".4"/>
+  </svg>
+
+  <div class="hero-content">
+    <div class="hero-tag">
+      <span data-t="hero_eyebrow">Ethiopian Made · Horn of Africa Ready</span>
+    </div>
+    <h1 data-t="hero_h1">Ethiopian<br><em>AI</em><br>Platform</h1>
+    <div class="hero-rule"></div>
+    <p class="hero-sub" data-t="hero_sub">
+      Wey AI builds intelligent AI applications rooted in Ethiopia — speaking Amharic, Afaan Oromoo, Tigrinya, Somali and English. From call centres to data management, we bring world-class AI to the Horn of Africa and every business beyond.
+    </p>
+    <div class="hero-btns">
+      <a href="#weycall" class="btn-gold" data-t="hero_btn1">See Wey Call →</a>
+      <a href="#platform" class="btn-outline" data-t="hero_btn2">Our Platform</a>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-inner">
+    <div class="ti"><b>አማርኛ</b> Amharic</div><div class="ti-sep"></div>
+    <div class="ti"><b>Afaan Oromoo</b> Oromo</div><div class="ti-sep"></div>
+    <div class="ti"><b>ትግርኛ</b> Tigrinya</div><div class="ti-sep"></div>
+    <div class="ti"><b>Soomaali</b> Somali</div><div class="ti-sep"></div>
+    <div class="ti"><b>English</b> Global</div><div class="ti-sep"></div>
+    <div class="ti">24/7 <b>Always On</b></div><div class="ti-sep"></div>
+    <div class="ti">Data <b>Stays Local</b></div><div class="ti-sep"></div>
+    <div class="ti"><b>Horn of Africa</b> Ready</div><div class="ti-sep"></div>
+    <div class="ti"><b>አማርኛ</b> Amharic</div><div class="ti-sep"></div>
+    <div class="ti"><b>Afaan Oromoo</b> Oromo</div><div class="ti-sep"></div>
+    <div class="ti"><b>ትግርኛ</b> Tigrinya</div><div class="ti-sep"></div>
+    <div class="ti"><b>Soomaali</b> Somali</div><div class="ti-sep"></div>
+    <div class="ti"><b>English</b> Global</div><div class="ti-sep"></div>
+    <div class="ti">24/7 <b>Always On</b></div><div class="ti-sep"></div>
+    <div class="ti">Data <b>Stays Local</b></div><div class="ti-sep"></div>
+    <div class="ti"><b>Horn of Africa</b> Ready</div><div class="ti-sep"></div>
+  </div>
+</div>
+
+<!-- REGION BAR -->
+<div class="region-bar">
+  <span class="region-label">Serving</span>
+  <span class="region-divider"></span>
+  <div class="region-flags">
+    <span class="rflag" title="Ethiopia">🇪🇹</span>
+    <span class="rflag" title="Somalia">🇸🇴</span>
+    <span class="rflag" title="Eritrea">🇪🇷</span>
+    <span class="rflag" title="Djibouti">🇩🇯</span>
+    <span class="rflag" title="South Sudan">🇸🇸</span>
+    <span class="rflag" title="Kenya">🇰🇪</span>
+    <span class="rflag" title="Sudan">🇸🇩</span>
+    <span class="rflag" title="Uganda">🇺🇬</span>
+  </div>
+  <span class="region-note">& beyond</span>
+</div>
+
+<!-- PLATFORM -->
+<section class="vision" id="platform">
+  <div class="s-label">The Platform</div>
+  <div class="s-rule"></div>
+  <h2 data-t="platform_h2">Six AI Applications.<br>One <em class="serif">Ethiopian</em> Platform.</h2>
+  <p class="s-intro" data-t="platform_intro">We are building the Horn of Africa's complete AI application stack — starting with the products businesses need most, expanding into every dimension of how East Africans work and live.</p>
+  <div class="platform-grid fade">
+
+    <div class="p-card live">
+      <div class="p-name">Wey <span>Call</span></div>
+      <div class="p-sub">AI Call Centre Agent</div>
+      <div class="p-divider"></div>
+      <p class="p-desc">Replaces IVR systems with intelligent conversational voice agents. Handles customer support, bookings, complaints, and escalations in Amharic, Afaan Oromoo, Tigrinya, Somali and English — 24 hours a day.</p>
+    </div>
+
+    <div class="p-card dev">
+      <div class="p-name">Wey <span>Data</span></div>
+      <div class="p-sub">AI Data Management</div>
+      <div class="p-divider"></div>
+      <p class="p-desc">Transforms how businesses in the Horn handle information. Document digitization, business intelligence, customer data management, and institutional record systems — all AI-powered, all local.</p>
+    </div>
+
+    <div class="p-card soon">
+      <div class="p-name">Wey <span>Assist</span></div>
+      <div class="p-sub">AI Personal Assistant</div>
+      <div class="p-divider"></div>
+      <p class="p-desc">An intelligent personal assistant that speaks your language. Manages schedules, handles research, drafts communications, and organizes your day — entirely in Amharic or your preferred language.</p>
+    </div>
+
+    <div class="p-card soon">
+      <div class="p-name">Wey <span>Web</span></div>
+      <div class="p-sub">AI Web Assistant</div>
+      <div class="p-divider"></div>
+      <p class="p-desc">Brings AI intelligence to your online presence. Customer-facing chat, web browsing assistance, content generation, and multilingual support — built for businesses operating across the Horn of Africa.</p>
+    </div>
+
+    <div class="p-card soon">
+      <div class="p-name">Wey <span>Office</span></div>
+      <div class="p-sub">AI Office Management</div>
+      <div class="p-divider"></div>
+      <p class="p-desc">Automates the operational layer of businesses. HR processes, inventory, document handling, staff scheduling, and reporting — managed by AI, reviewed by you.</p>
+    </div>
+
+    <div class="p-card soon">
+      <div class="p-name">Wey <span>Home</span></div>
+      <div class="p-sub">AI Home Intelligence</div>
+      <div class="p-divider"></div>
+      <p class="p-desc">Brings AI into the Ethiopian home. Smart appliance management, energy monitoring, security integration, and household automation — designed for the local context, not imported from elsewhere.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- WEY CALL DEEP DIVE -->
+<section id="weycall">
+  <div class="s-label">Flagship Product</div>
+  <div class="s-rule"></div>
+  <h2>Wey <em class="serif" style="color:var(--gold)">Call</em></h2>
+  <p class="s-intro">Our live AI call centre agent — replacing outdated press-1-for-Amharic systems with intelligent, natural conversation across five languages.</p>
+  <div class="call-split fade">
+    <div class="call-left">
+      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1.5px;margin-bottom:28px;color:var(--text)">What it does</h3>
+      <ul class="check-list">
+        <li>Answers customer calls instantly — no queue, no hold music, no IVR menus</li>
+        <li>Understands natural speech in Amharic, Afaan Oromoo, Tigrinya, Somali and English</li>
+        <li>Handles 70% of support queries autonomously — complaints, bookings, status, payments</li>
+        <li>Detects uncertainty and escalates to a human agent automatically</li>
+        <li>Logs every call with duration, intent, language, and resolution status</li>
+        <li>Provides a daily dashboard — top issues, call volume, resolution rate</li>
+        <li>Runs 24 hours a day, 7 days a week, 365 days a year</li>
+        <li>Deployed on local infrastructure — your data never leaves the region</li>
+      </ul>
+      <div class="lang-cards">
+        <div class="lang-card">
+          <span class="lang-name">Amharic</span>
+          <span class="lang-script">አማርኛ</span>
+          <span class="lang-voice">Native voice</span>
+        </div>
+        <div class="lang-card">
+          <span class="lang-name">Afaan Oromoo</span>
+          <span class="lang-script">Latin script</span>
+          <span class="lang-voice">Neural voice</span>
+        </div>
+        <div class="lang-card">
+          <span class="lang-name">Tigrinya</span>
+          <span class="lang-script">ትግርኛ</span>
+          <span class="lang-voice">Ethiopic voice</span>
+        </div>
+        <div class="lang-card">
+          <span class="lang-name">Somali</span>
+          <span class="lang-script">Soomaali</span>
+          <span class="lang-voice">Neural voice</span>
+        </div>
+        <div class="lang-card">
+          <span class="lang-name">English</span>
+          <span class="lang-script">Latin script</span>
+          <span class="lang-voice">Standard voice</span>
+        </div>
+      </div>
+    </div>
+    <div class="call-right">
+      <h3>Who it's for</h3>
+      <ul class="check-list">
+        <li><strong style="color:var(--text)">Banks & Financial Institutions</strong> — balance inquiries, transfers, loan queries, branch locator, 24/7</li>
+        <li><strong style="color:var(--text)">Ride-Hailing & Delivery</strong> — trip support, fare disputes, driver onboarding, payment issues</li>
+        <li><strong style="color:var(--text)">Insurance Companies</strong> — claim status, policy queries, complaint handling</li>
+        <li><strong style="color:var(--text)">Private Hospitals & Clinics</strong> — appointment booking, lab results, pharmacy queries</li>
+        <li><strong style="color:var(--text)">Courier & Logistics</strong> — order tracking, delivery status, rescheduling</li>
+        <li><strong style="color:var(--text)">Any business</strong> receiving repetitive customer calls in the region's languages</li>
+      </ul>
+      <div class="pilot-box">
+        <div class="pilot-label">30-Day Pilot Programme</div>
+        <p class="pilot-text">Wey Call runs alongside your existing system for 30 days. Your team reviews everything. Zero risk. Real results. We prove it works before you commit.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:80px 68px">
+  <div class="stats-row fade">
+    <div class="stat"><div class="stat-n">5</div><div class="stat-l">Languages — first class citizens</div></div>
+    <div class="stat"><div class="stat-n">24/7</div><div class="stat-l">Availability — no shifts, no overtime</div></div>
+    <div class="stat"><div class="stat-n">70%</div><div class="stat-l">Of support calls handled autonomously</div></div>
+    <div class="stat"><div class="stat-n">0</div><div class="stat-l">Customer data leaving your region</div></div>
+  </div>
+</section>
+
+<!-- BEFORE / AFTER -->
+<section>
+  <div class="s-label">The Difference</div>
+  <div class="s-rule"></div>
+  <h2>Before and After<br>Wey <em class="serif" style="color:var(--gold)">AI</em></h2>
+  <p class="s-intro">Businesses across the Horn of Africa deserve better than press-1-for-Amharic. Here is what changes.</p>
+  <div class="ba-grid fade">
+    <div class="ba-card bad">
+      <h3>❌ Without Wey AI</h3>
+      <div class="ba-item"><span class="ba-icon">⏳</span>Customers wait 10–20 minutes on hold</div>
+      <div class="ba-item"><span class="ba-icon">📟</span>Press 1 for Amharic. Press 2 for balance. Dead ends.</div>
+      <div class="ba-item"><span class="ba-icon">🌐</span>Support in one language — minority speakers underserved</div>
+      <div class="ba-item"><span class="ba-icon">🌙</span>Call centre closes at 8pm — problems don't</div>
+      <div class="ba-item"><span class="ba-icon">🔁</span>Same 10 questions answered 200 times a day</div>
+      <div class="ba-item"><span class="ba-icon">📊</span>Zero data on what customers are actually asking</div>
+    </div>
+    <div class="ba-card good">
+      <h3>✅ With Wey AI</h3>
+      <div class="ba-item"><span class="ba-icon">⚡</span>Answered in seconds — no queue, no hold music</div>
+      <div class="ba-item"><span class="ba-icon">🗣️</span>Just talk naturally — the AI understands and responds</div>
+      <div class="ba-item"><span class="ba-icon">🌍</span>Fluent in Amharic, Oromoo, Tigrinya, Somali and English</div>
+      <div class="ba-item"><span class="ba-icon">🌓</span>Available 24 hours, every day, every language</div>
+      <div class="ba-item"><span class="ba-icon">🧠</span>AI handles repetitive queries — humans handle complex ones</div>
+      <div class="ba-item"><span class="ba-icon">📈</span>Daily dashboard — every call logged, analyzed, actionable</div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section class="roadmap" id="roadmap">
+  <div class="s-label">Where We're Going</div>
+  <div class="s-rule"></div>
+  <h2>The Wey AI<br><em class="serif">Roadmap</em></h2>
+  <p class="s-intro">We are building the Horn of Africa's complete AI application platform — one product at a time, done properly.</p>
+  <div class="road-list fade">
+    <div class="road-item current">
+      <div class="road-phase">Now · 2026</div>
+      <div>
+        <div class="road-title">Wey Call — AI Call Centre Agent</div>
+        <div class="road-desc">Multilingual voice AI for businesses across the Horn of Africa. Live and available for pilot deployment.</div>
+      </div>
+      <div class="road-badge live">Live</div>
+    </div>
+    <div class="road-item">
+      <div class="road-phase">Q3 2026</div>
+      <div>
+        <div class="road-title">Wey Data — AI Data Management</div>
+        <div class="road-desc">Document digitization, business intelligence, and customer data platforms for organizations across the region.</div>
+      </div>
+      <div class="road-badge building">In Development</div>
+    </div>
+    <div class="road-item">
+      <div class="road-phase">Q1 2027</div>
+      <div>
+        <div class="road-title">Wey Assist — AI Personal Assistant</div>
+        <div class="road-desc">Amharic-first personal AI assistant for scheduling, research, and daily task management.</div>
+      </div>
+      <div class="road-badge next">Coming Soon</div>
+    </div>
+    <div class="road-item">
+      <div class="road-phase">Q2 2027</div>
+      <div>
+        <div class="road-title">Wey Web — AI Web Assistant</div>
+        <div class="road-desc">Intelligent web presence tools for businesses — multilingual chat, content, and support.</div>
+      </div>
+      <div class="road-badge next">Coming Soon</div>
+    </div>
+    <div class="road-item">
+      <div class="road-phase">Q3 2027</div>
+      <div>
+        <div class="road-title">Wey Office — AI Office Management</div>
+        <div class="road-desc">HR, inventory, document processing, and operational automation for organizations of all sizes.</div>
+      </div>
+      <div class="road-badge next">Coming Soon</div>
+    </div>
+    <div class="road-item">
+      <div class="road-phase">2028</div>
+      <div>
+        <div class="road-title">Wey Home — AI Home Intelligence</div>
+        <div class="road-desc">Smart home and appliance management built for the Ethiopian and East African home context.</div>
+      </div>
+      <div class="road-badge next">Coming Soon</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contact">
+  <div class="cta-box fade">
+    <div class="s-label" style="text-align:center">Get Started</div>
+    <h2>Ready to transform<br>your business?</h2>
+    <p>Start with a 30-day Wey Call pilot — zero risk, real results. Your existing system stays in place while we prove the value.</p>
+    <div class="contact-info">
+      <a href="tel:+251974434182">+251974434182</a>
+      <a href="tel:+251911908645">+251911908645</a>
+      <a href="mailto:hello@weyai.com.et">hello@weyai.com.et</a>
+      <span>Based in Addis Ababa · Serving the Horn of Africa and beyond</span>
+      <div style="margin-top:22px">
+        <a href="mailto:hello@weyai.com.et" class="btn-gold">Request a Demo</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a href="#" class="f-logo">Wey<span>AI</span></a>
+  <p>© 2026 Wey AI Technologies · Addis Ababa, Ethiopia</p>
+  <div class="f-links">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#contact">Contact</a>
+  </div>
+</footer>
+
+</div><!-- /main-wrap -->
+
+<script>
+/* ── TRANSLATIONS (EN / Amharic / Afaan Oromoo / Tigrinya) ─── */
+const LANG = {
+  en: {
+    nav_home:"Home", nav_platform:"Platform", nav_roadmap:"Roadmap", nav_contact:"Contact",
+    cta_btn:"Request Demo",
+    hero_eyebrow:"Ethiopian Made · Horn of Africa Ready",
+    hero_h1:"Ethiopian\nAI\nPlatform",
+    hero_sub:"Wey AI builds intelligent AI applications rooted in Ethiopia — speaking Amharic, Afaan Oromoo, Tigrinya, Somali and English. From call centres to data management, we bring world-class AI to the Horn of Africa and every business beyond.",
+    hero_btn1:"See Wey Call →", hero_btn2:"Our Platform",
+    platform_h2:"Six AI Applications.\nOne Ethiopian Platform.",
+    platform_intro:"We are building the Horn of Africa's complete AI application stack — starting with the products businesses need most, expanding into every dimension of how East Africans work and live."
+  },
+  am: {
+    nav_home:"መነሻ", nav_platform:"ፕላትፎርም", nav_roadmap:"መደብ", nav_contact:"ያግኙን",
+    cta_btn:"ሙከራ ጠይቅ",
+    hero_eyebrow:"የኢትዮጵያ ፈጠራ · ለቀርን አፍሪካ ዝግጁ",
+    hero_h1:"የኢትዮጵያ\nAI\nፕላትፎርም",
+    hero_sub:"ዌይ AI ኢትዮጵያ ውስጥ የተሠሩ ብልጥ AI አፕሊኬሽኖችን ይሠራል — በአማርኛ፣ ኦሮምኛ፣ ትግርኛ፣ ሶማሊኛ እና እንግሊዝኛ ይናገራል። ከጥሪ ማዕከሎች እስከ ዳታ አስተዳደር፣ ዓለም አቀፍ ደረጃ AI ለቀርን አፍሪካ እናቀርባለን።",
+    hero_btn1:"ዌይ ኮልን ይዩ →", hero_btn2:"ፕላትፎርማችን",
+    platform_h2:"ስድስት AI አፕሊኬሽኖች።\nአንድ የኢትዮጵያ ፕላትፎርም።",
+    platform_intro:"ለቀርን አፍሪካ ሙሉ AI አፕሊኬሽን ፕላትፎርም እየሠራን ነው — ቢዝነሶች ከሚፈልጉት ምርት ጀምሮ።"
+  },
+  om: {
+    nav_home:"Mana", nav_platform:"Paltifoomii", nav_roadmap:"Karoora", nav_contact:"Nu Quunnamaa",
+    cta_btn:"Demo Gaafadhu",
+    hero_eyebrow:"Itoophiyaatti Uumame · Gaanfa Afrikaa Qophaa'e",
+    hero_h1:"Paltifoomii\nAI\nItoophiyaa",
+    hero_sub:"Wey AI appilikeeshinoota AI ogummaa qabu Itoophiyaa keessatti ijara — Afaan Oromoo, Amaaraa, Tigrinya, Soomaali fi Ingliziin dubbata. Call centerirraa hanga bulchiinsa daataatti, AI sadarkaa addunyaa Gaanfa Afrikaa fidna.",
+    hero_btn1:"Wey Call Ilaa →", hero_btn2:"Paltifoormiiwwan Keenya",
+    platform_h2:"Appilikeeshinoota AI Ja'a.\nPaltifoomii Itoophiyaa Tokko.",
+    platform_intro:"Paltifoomii AI guutuu Gaanfa Afrikaa ijaarra jirra — omishaalee daldalli hunda caalaa barbaadu irraa jalqabee."
+  },
+  ti: {
+    nav_home:"መእተዊ", nav_platform:"መድረኽ", nav_roadmap:"መደብ", nav_contact:"ርኸቡና",
+    cta_btn:"ዲሞ ሕተቱ",
+    hero_eyebrow:"ኢትዮጵያ ዝተሰርሔ · ቀርኒ ኣፍሪቃ ዝዳሎ",
+    hero_h1:"ናይ ኢትዮጵያ\nAI\nመድረኽ",
+    hero_sub:"ዌይ AI ኢትዮጵያ ዝተሰርሑ ብልሓቶም AI ኣፕሊኬሽናት ይሰርሕ — ትግርኛ፣ ኣምሓርኛ፣ ኦሮምኛ፣ ሶማሊ ን ን.ዝ. ዝዛረብ። ካብ ማዕከን ስልኪ ክሳዕ ምሕደራ ዳታ፣ AI ደረጃ ዓለም ንቀርኒ ኣፍሪቃ ነቕርብ።",
+    hero_btn1:"ዌይ ኮል ርኣዩ →", hero_btn2:"መድረኽና",
+    platform_h2:"ሽዱሽተ AI ኣፕሊኬሽናት።\nሓደ ናይ ኢትዮጵያ መድረኽ።",
+    platform_intro:"ምሉእ AI መድረኽ ቀርኒ ኣፍሪቃ ንሰርሕ ኣለና — ካብ ዝበዝሑ ቢዝነሳት ዘድሊ ምርት ጀሚርና።"
+  }
+};
+
+let curLang = localStorage.getItem('weyai_lang') || 'en';
+
+function applyLang(lang) {
+  const t = LANG[lang];
+  if (!t) return;
+
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const key = el.getAttribute('data-t');
+    if (!t[key]) return;
+    // handle newlines for h1
+    if (el.tagName === 'H1') {
+      el.innerHTML = t[key].split('\n').map((line, i) => i === 1 ? `<em>${line}</em>` : line).join('<br>');
+    } else {
+      el.textContent = t[key];
+    }
+  });
+
+  document.querySelectorAll('.lb').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+  document.documentElement.lang = lang;
+  localStorage.setItem('weyai_lang', lang);
+  curLang = lang;
+}
+
+document.querySelectorAll('.lb').forEach(b => {
+  b.addEventListener('click', () => applyLang(b.dataset.lang));
+});
+
+applyLang(curLang);
+
+/* ── SCROLL SPY ── */
+const sections = document.querySelectorAll('section[id]');
+const sbItems  = document.querySelectorAll('.sb-item[data-section]');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 220) cur = s.id; });
+  sbItems.forEach(i => {
+    i.classList.remove('active');
+    if (i.dataset.section === cur) i.classList.add('active');
+  });
+}, { passive:true });
+
+/* ── FADE ── */
+const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }), { threshold:.08 });
+document.querySelectorAll('.fade').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
